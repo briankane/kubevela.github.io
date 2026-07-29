@@ -1,0 +1,407 @@
+---
+title: 独立安装 KubeVela
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+## 概览
+
+本文档将向你展示如何以独立模式安装 KubeVela。 有两种选择：
+
+1. [本地机器](#local)：在本地机器中安装，支持 Linux，macOS 和 Windows。
+2. [远程 Linux 服务器](#remote)：在具有可访问IP地址的远程 Linux 服务器中安装
+
+:::tip
+在非 Linux 系统的远程服务器中安装 KubeVela 尚未经过完全测试。
+:::
+
+### VelaD 简介
+
+以上两种选项中，我们都将使用 [VelaD](https://github.com/kubevela/velad) 来以独立模式安装 KubeVela。它是一个命令行工具，
+将 KubeVela 最小安装以及使用 VelaUX 的一切依赖打包为一个可执行文件。你可以使用 VelaD 在安装有 Docker 的 macOS/Windows 中或 Linux 中安装 KubeVela。
+
+- VelaD 集成了 [K3s](https://rancher.com/docs/k3s/latest/en/quick-start/) 和 [k3d](https://k3d.io/) 用于自动化管理 Kubernetes 集群，用户无需关心 Kubernetes 集群管理的细节。
+- VelaD 打包了镜像等依赖，可以在没有网络的环境中最小化安装 KubeVela 以及其 VelaUX 插件。
+
+:::caution
+以独立模式安装仅适用于开发和测试目的，这时你无需了解其中的 Kubernetes。但是当你想要在生产中使用它时，你需要能够理解和维护 K3s，即承担管理 Kubernetes 的工作。
+:::
+
+## 在本地机器上安装 {#local}
+
+### 1. 准备环境
+
+VelaD 支持在这些操作系统中安装 KubeVela：Linux, macOS, Windows。
+
+**要求**
+
+1. 如果你在使用 Linux 或者 macOS，确保你的机器上安装了 `curl`。
+2. 如果你在使用 macOS or Windows, 确保你已经安装 [Docker Desktop](https://www.docker.com/products/docker-desktop)。
+
+### 2. 安装 VelaD 和 KubeVela
+
+#### 下载 VelaD
+
+下面等脚本将下载二进制文件并将其放置在你的系统“PATH”中，
+
+<Tabs className="unique-tabs">
+<TabItem value="Linux">
+
+在安装过程中你可能需要 root 权限。 如果你不需要 root 权限和自动化，你可以从[发布页面](https://github.com/kubevela/velad/releases)下载并手动解压缩。
+```shell
+curl -fsSl https://kubevela.io/script/install-velad.sh | bash
+```
+
+检查 `velad` 安装到 `/usr/local/bin/`
+
+</TabItem>
+<TabItem value="Windows">
+
+以管理员身份启动 PowerShell 并执行如下命令:
+
+```shell
+powershell -Command "iwr -useb https://kubevela.io/script/install-velad.ps1 | iex"
+```
+检查 `velad` 安装到 `C:\vela\`
+
+:::info
+VelaD 会帮助安装 Vela CLI，这要求管理员权限。
+:::
+
+<details>
+  <summary>如何以管理员身份启动 PowerShell</summary>
+
+  1. 点击"开始"按钮打开开始菜单。
+  2. 在开始菜单中，向下滚动找到"Windows PowerShell"目录，右键点击其中的"Windows Powershell"选项，并选择"以管理员身份运行"。
+
+</details>
+
+</TabItem>
+</Tabs>
+
+#### 安装 KubeVela
+
+```shell
+velad install
+```
+
+<details>
+  <summary>期望输出</summary>
+
+  ```
+  Preparing K3s images...
+  Successfully prepare k3s image: /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
+  Successfully prepare k3d images
+
+  ...snip...
+
+  KubeVela control plane has been successfully set up on your cluster.
+  If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
+
+  Keep the token below if you want to restart the control plane
+  K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
+
+  🚀 Successfully install KubeVela control plane
+  🔭 See available commands with `vela help`
+  ```
+
+</details>
+
+#### 验证安装结果
+
+设置 kubeconfig 并列出所有内置的组件定义:
+
+<Tabs className="unique-tabs" groupId="os">
+  <TabItem label="Linux/macOS" value="unix">
+
+  ```shell
+  export KUBECONFIG=$(velad kubeconfig --host)
+  vela comp
+  ```
+
+  </TabItem>
+  <TabItem label="Windows" value="win">
+
+  ```powershell
+  $env:PATH += ";$HOME\.vela\bin;"
+  $env:KUBECONFIG = $(velad kubeconfig --host)
+  vela comp
+  ```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+- 在macOS/Linux中，执行 `velad install` 时，已经安装了 vela CLI (`vela`) 并自动添加到 `PATH`。 所以你可以直接使用它。
+- 用于配置对集群的访问的文件称为 *kubeconfig 文件*
+:::
+
+<details>
+  <summary>期望输出</summary>
+
+  ```
+  NAME                  	DEFINITION              	DESCRIPTION
+  config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
+  daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
+  cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
+  worker                	deployments.apps        	Describes long-running, scalable, containerized services
+  that running at backend. They do NOT have network endpoint
+  to receive external network traffic.
+  task                  	jobs.batch              	Describes jobs that run code or a script to completion.
+  webservice            	deployments.apps        	Describes long-running, scalable, containerized services
+  that have a stable network endpoint to receive external
+  network traffic from customers.
+  config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
+  k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
+  properties
+  raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
+  This definition is DEPRECATED, please use 'k8s-objects'
+  instead.
+  ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+  Notice that this component type have special handle logic.
+  ```
+
+
+</details>
+
+### 3. 安装 VelaUX
+
+VelaUX 是 KubeVela 的仪表板。 它是在你的集群中运行的 Web 应用程序。 你可以使用浏览器访问它。
+如果你不使用 KubeVela 的 UI 控制台，这是可选的。
+
+<Tabs className="unique-tabs" groupId="os">
+  <TabItem label="Linux/macOS" value="unix">
+
+  ```shell script
+  vela addon enable ~/.vela/addons/velaux
+  ```
+
+  </TabItem>
+  <TabItem label="Windows" value="win">
+
+  ```powershell
+  vela addon enable $HOME\.vela\addons\velaux
+  ```
+
+  </TabItem>
+</Tabs>
+
+<details>
+  <summary>期望输出</summary>
+
+  ```
+  Addon: velaux enabled Successfully.
+  ```
+</details>
+
+默认情况下，velaux 没有任何暴露的端口，你可以通过以下方式查看：
+
+```shell
+vela port-forward addon-velaux -n vela-system 8080:80
+```
+
+选择 `> local | velaux | velaux` 来访问 VelaUX
+
+:::note
+如需更多 VelaUX 选项，请参阅 [VelaUX 插件](../reference/addons/velaux.md) 文档了解其他高级安装参数。
+:::
+
+VelaUX 需要身份验证。 默认用户名是 `admin`，密码是 **`VelaUX12345`**。首次登录时需要使用新密码覆盖，请务必记住新密码。
+
+### 4. 清理
+
+此命令将清理 KubeVela 控制器以及 Kubernetes 集群，有关更详细的步骤，请参阅 [高级指南](../platform-engineers/advanced-install.mdx#uninstall)。
+
+```
+velad uninstall
+```
+
+## 在远程服务器上安装 KubeVela {#remote}
+
+下面向你展示如何在远程服务器（如 aws EC2 或 阿里云 ECS）上以独立模式安装 KubeVela。
+
+### 1.准备一台机器
+
+准备一台 Linux 系统的远程服务器，对机器有如下要求
+
+**要求**
+
+1. 确保你的机器安装了 `curl`。
+2. 此服务器有一个公网 IP，或者在企业内网中你可以访问该服务器的 IP。
+3. 如果你使用的是云服务器，请确保你在安全组中打开了 6443 端口。
+
+### 2. 安装 VelaD 和 KubeVela
+
+#### 下载 VelaD
+
+下面等脚本将下载二进制文件并将其放置在你的系统“PATH”中，
+因此在安装过程中你可能需要 root 权限。
+如果你不需要root权限和自动化，你可以从[发布页面](https://github.com/kubevela/velad/releases)下载并手动解压缩。
+
+```shell
+curl -fsSl https://kubevela.io/script/install-velad.sh | bash
+```
+
+检查 `velad` 已经安装到 `/usr/local/bin/`
+
+#### 安装 KubeVela
+
+运行以下命令并将`$SERVER_PUBLIC_IP`替换为服务器的公共 IP。
+
+```shell
+velad install --bind-ip=$SERVER_PUBLIC_IP
+```
+
+<details>
+  <summary>期望输出</summary>
+
+  ```
+  Preparing K3s images...
+  Successfully prepare k3s image: /Users/sunjianbo/.vela/velad/k3s/k3s-airgap-images-amd64.tgz
+  Successfully prepare k3d images
+
+  ...snip...
+
+  KubeVela control plane has been successfully set up on your cluster.
+  If you want to enable dashboard, please run "vela addon enable /Users/sunjianbo/.vela/addons/velaux"
+
+  Keep the token below if you want to restart the control plane
+  K1075e7f6c77555e6ebdaf4854e4a2f39ae4287cfad23f27cdac5b33608d44633fe::server:zSpzbdbGzVxOwfBvvjgT
+
+  🚀 Successfully install KubeVela control plane
+  🔭 See available commands with `vela help`
+  🔑 To access the cluster, set KUBECONFIG:
+  export KUBECONFIG=$(velad kubeconfig --name default --host)
+  ```
+
+</details>
+
+#### 验证安装结果
+
+设置 kubeconfig 并列出所有内置的组件定义:
+
+```shell
+export KUBECONFIG=$(velad kubeconfig --host)
+vela comp
+```
+
+:::tip
+- 执行 `velad install` 时，已经安装了 vela CLI (`vela`) 并自动添加到 `PATH`。 所以你可以直接使用它。
+稍后我们将在本地机器上访问 KubeVela，我们将再次在本地机器上安装 vela CLI。
+- 用于配置对集群的访问的文件称为 *kubeconfig 文件*，vela CLI也使用该文件访问 KubeVela。
+:::
+
+<details>
+  <summary>期望输出</summary>
+
+  ```
+  NAME                  	DEFINITION              	DESCRIPTION
+  config-helm-repository	autodetects.core.oam.dev	Config information to authenticate helm chart repository
+  daemon                	daemonsets.apps         	Describes daemonset services in Kubernetes.
+  cron-task             	cronjobs.batch          	Describes cron jobs that run code or a script to completion.
+  worker                	deployments.apps        	Describes long-running, scalable, containerized services
+  that running at backend. They do NOT have network endpoint
+  to receive external network traffic.
+  task                  	jobs.batch              	Describes jobs that run code or a script to completion.
+  webservice            	deployments.apps        	Describes long-running, scalable, containerized services
+  that have a stable network endpoint to receive external
+  network traffic from customers.
+  config-image-registry 	autodetects.core.oam.dev	Config information to authenticate image registry
+  k8s-objects           	autodetects.core.oam.dev	K8s-objects allow users to specify raw K8s objects in
+  properties
+  raw                   	autodetects.core.oam.dev	Raw allow users to specify raw K8s object in properties.
+  This definition is DEPRECATED, please use 'k8s-objects'
+  instead.
+  ref-objects           	autodetects.core.oam.dev	Ref-objects allow users to specify ref objects to use.
+  Notice that this component type have special handle logic.
+  ```
+
+</details>
+
+### 3. 安装 VelaUX
+
+VelaUX 是 KubeVela 的仪表板。 它是在你的集群中运行的 Web 应用程序。 你可以使用浏览器访问它。
+如果你不使用 KubeVela 的 UI 控制台，可以跳过。
+
+```shell script
+vela addon enable ~/.vela/addons/velaux serviceType=NodePort
+```
+
+<details>
+  <summary>期望输出</summary>
+
+  ```
+  Addon: velaux enabled Successfully.
+  ...
+  I0907 12:03:11.462606   98769 utils.go:156] find cluster gateway service vela-system/kubevela-cluster-gateway-service:9443
+  Please access addon-velaux from the following endpoints:
+  +---------+-----------+-------------------------------+----------------------------+-------+
+  | CLUSTER | COMPONENT |   REF(KIND/NAMESPACE/NAME)    |          ENDPOINT          | INNER |
+  +---------+-----------+-------------------------------+----------------------------+-------+
+  | local   | apiserver | Service/vela-system/apiserver | apiserver.vela-system:8000 | true  |
+  | local   | velaux    | Service/vela-system/velaux    | http://47.252.17.47:30000  | false |
+  +---------+-----------+-------------------------------+----------------------------+-------+
+  ```
+
+</details>
+
+通过添加 `serviceType=NodePort` 参数，我们告诉 VelaUX 通过 K8s
+[NodePort](https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport) 的方式暴露服务。
+使用以下命令查询 VelaUX 的端点：
+```shell
+vela status addon-velaux -n vela-system --endpoint
+```
+
+它将显示类似 `http://PUBLIC-IP:PORT` 的 URL。 你可以使用浏览器访问该 URL。
+
+:::caution 开启端口
+如果你使用的是云服务器，请在安全组中打开此端口。
+:::
+
+:::note
+如需更多 VelaUX 选项，请参阅 [VelaUX 插件](../reference/addons/velaux.md) 文档了解其他高级安装参数。
+:::
+
+VelaUX 需要身份验证。 默认用户名是 `admin`，密码是 **`VelaUX12345`**。首次登录时需要使用新密码覆盖，请务必记住新密码。
+
+### 4. 从本地访问 KubeVela (可选)
+
+你可以使用本地计算机访问 KubeVela。 请确认在上一步服务器上执行 `velad install` 时加了 `--bind-ip` 参数。
+
+#### 复制 kubeconfig
+
+在远程服务器上执行如下命令，它将打印集群的 kubeconfig。 `--external` 表示打印的 kubeconfig 可以从其他机器使用（如你的本地机器）。
+
+```shell
+cat $(velad kubeconfig --external)
+```
+
+然后你需要手动把这个 kubeconfig 内容复制到你的本地机器的一个文件里。 假设你将这个文件保存在本地机器的 `~/.kube/velad-config` 中。
+
+#### 在本地机器中安装 vela CLI
+
+要访问集群，还需要在本地机器上安装 vela CLI (`vela`)。
+
+```shell
+curl -fsSl https://kubevela.io/script/install.sh | bash
+```
+
+#### 验证安装
+
+设置 kubeconfig 并列出所有内置的组件定义:
+
+```shell
+export KUBECONFIG=~/.kube/velad-config
+vela comp
+```
+
+
+### 5. 清理
+
+在远程服务器上运行如下命令。此命令将清理 KubeVela 控制器以及 Kubernetes 集群，有关更详细的步骤，请参阅 [高级指南](../platform-engineers/advanced-install.mdx#uninstall)。
+
+```shell
+velad uninstall
+```
+
