@@ -240,6 +240,7 @@ module.exports = {
           items: [
             'platform-engineers/system-operation/performance-finetuning',
             'platform-engineers/system-operation/controller-sharding',
+            'platform-engineers/system-operation/component-dispatch',
             'platform-engineers/system-operation/controller-grayscale-release',
             'platform-engineers/system-operation/high-availability',
             'platform-engineers/system-operation/migration-from-old-version',
