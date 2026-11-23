@@ -57,8 +57,9 @@ On the hub, vela-core runs vela-agent too, for components placed on the hub's ow
   ([Multi-cluster delivery](../../case-studies/multi-cluster.md)).
 - Only the `deploy` and `apply-component` workflow steps dispatch Components. Other steps that
   apply resources, such as `apply-object`, still apply them from the hub.
-- `vela status --tree`, the resource views in VelaUX and the prism resource APIs don't yet show
-  the resources inside a Component. `vela status` and the Application's `status.services` do.
+- The prism resource APIs, and VelaUX until it's built against v1.13, list a dispatched
+  component's `Component` rather than the resources inside it. The `vela` CLI lists the resources
+  (see [What's different](#whats-different)).
 
 ## Turn it on at the hub
 
@@ -168,6 +169,7 @@ goes out.
 | `$(component.<name>)` reads | read from the live resource | answered from what vela-agent observed and reported. The hub asks it for exactly the fields that are read, and values from Secrets come back sealed, so only the hub can open them |
 | Control-plane-only traits (`controlPlaneOnly: true`) | applied on the hub | dispatched to a Component of their own on the hub, one per placement, ending `-cp` |
 | Removing a component, deleting the app | the hub deletes the resources | the hub writes a signed tombstone; vela-agent collects everything, then the Component goes |
+| Listing resources (`vela status --tree`, `--endpoint`, `vela logs`, `exec`, `port-forward`) | from the Application's ResourceTrackers | from each Component's `status.resources`, which vela-agent fills with what it applied. The payload Secret isn't listed |
 
 ## Switching an existing Application
 
