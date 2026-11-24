@@ -148,11 +148,14 @@ step writes a Component there:
 
 ```shell
 $ kubectl get components -n shop        # against prod-use1
-NAME                          CLUSTER     REVISION   OBSERVED   HEALTHY   AGE
-shop-web-prod-use1-3f9c2a1e   prod-use1   1          1          true      40s
+NAME                          CLUSTER     READY   REASON   REVISION   OBSERVED   AGE
+shop-web-prod-use1-3f9c2a1e   prod-use1   True    Ready    1          1          40s
 ```
 
-`REVISION` is what the hub last dispatched and `OBSERVED` is what vela-agent last applied. A
+`REVISION` is what the hub last dispatched and `OBSERVED` is what vela-agent last applied.
+`READY` and `REASON` come from the Component's `Ready` condition: while it's `False`, the reason
+names the stage it's stuck at, and `-o wide` adds the message (see
+[Reading a Component](#reading-a-component)). A
 Component is named `<app>-<component>[-<replica key>]-<cluster>`, trimmed to fit a label value,
 then 8 characters of a hash over every part, so two placements never share a name.
 
@@ -165,7 +168,7 @@ goes out.
 | | In-process | Dispatched |
 | --- | --- | --- |
 | Who applies | the hub, through cluster-gateway | vela-agent, on the cluster |
-| PostDispatch traits | applied once the workload is healthy | dispatched as the Component's next revision once vela-agent reports the workload healthy |
+| PostDispatch traits | applied once the workload is healthy | rendered and applied by vela-agent once the workload is healthy, within the same revision |
 | `$(component.<name>)` reads | read from the live resource | answered from what vela-agent observed and reported. The hub asks it for exactly the fields that are read, and values from Secrets come back sealed, so only the hub can open them |
 | Control-plane-only traits (`controlPlaneOnly: true`) | applied on the hub | dispatched to a Component of their own on the hub, one per placement, ending `-cp` |
 | Removing a component, deleting the app | the hub deletes the resources | the hub writes a signed tombstone; vela-agent collects everything, then the Component goes |
@@ -272,6 +275,34 @@ warning.
 
 ## Troubleshooting
 
+### Reading a Component
+
+vela-agent takes each revision through a fixed set of stages, and records each one as a
+condition on the Component, in this order:
+
+| Condition | Passes when |
+| --- | --- |
+| `Verified` | the signature, target cluster, revision and payload all check out |
+| `Applied` | everything in the payload is applied |
+| `WorkloadHealthy` | the workload passes its health check |
+| `PostRendered` | the PostDispatch traits are rendered, or there are none (`NoneDeclared`) |
+| `TraitsHealthy` | every trait passes its health check |
+| `Collected` | whatever the revision dropped is deleted |
+
+A stage after the first one that hasn't passed shows `NotReached`. Three more conditions sum
+them up, and are what kstatus-based tools (Flux, Argo CD, `kubectl wait`) read:
+
+| Condition | Means |
+| --- | --- |
+| `Ready` | `True` once every stage has passed. Otherwise `False`, with the reason and message of the first stage that hasn't |
+| `Reconciling` | vela-agent is still working on it: applying, waiting on health, collecting |
+| `Stalled` | it can't pass without something changing first: the hub's spec, this cluster's trust, or a stale ResourceTracker someone has to delete |
+
+So `kubectl get components -o wide` is usually all you need. A reason like `WorkloadUnhealthy`
+is `Reconciling`, and vela-agent looks again within seconds, backing off to every 10 seconds
+while it stays unhealthy. A reason like `UntrustedKey` or `ApplyRejected` is `Stalled`, and the
+sections below say what to do about it.
+
 ### A Component is refused
 
 vela-agent records why on the Component's `Verified` condition, and as an event:
@@ -313,6 +344,11 @@ at the Component's `Verified` and `Applied` conditions, and at vela-agent's logs
 
 Change the wait with vela-core's `--component-reconciler-timeout` flag (default `2m`).
 
+While it waits, the hub reads the Component every `--component-agent-health-interval` (default
+`1s`), and renders the Application again as soon as vela-agent reports a change. Otherwise it
+renders again on the workflow's backoff, but never sooner than
+`--component-agent-render-interval` (default `5s`).
+
 ## Reference
 
 | Setting | Where | Default |
@@ -322,6 +358,8 @@ Change the wait with vela-core's `--component-reconciler-timeout` flag (default 
 | `agent.clusterName` (`--agent-cluster-name`) | managed clusters | `local` on the hub |
 | `agent.producers` (`--component-producers`) | managed clusters | vela-core's own service account |
 | `--component-reconciler-timeout` | hub | `2m` |
+| `--component-agent-render-interval` | hub | `5s` |
+| `--component-agent-health-interval` | hub | `1s` |
 | `componentDispatch.signingKeyMaxAge` (`--component-signing-key-max-age`) | hub | empty: rotate only when asked |
 
 | Name | Kind | On |
