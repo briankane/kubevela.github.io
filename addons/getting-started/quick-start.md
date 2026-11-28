@@ -157,6 +157,6 @@ Successfully disable addon:fluxcd
 
 ## Next
 
-- See what else is in the [Addon Catalog](../overview.md).
+- See what else is in the [Addon Catalog](/addons/catalog).
 - Work through the [Examples](../examples/overview.md), which use more of the catalog's addons together.
 - Write your own with [Make Your Own Addon](../developer/make-your-own-addon.md).

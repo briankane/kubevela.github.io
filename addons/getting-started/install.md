@@ -39,7 +39,7 @@ Please access addon-fluxcd from the following endpoints:
 
 The CLI waits until the addon's Application is running. An addon's dependencies are enabled first: `kruise-rollout` depends on `fluxcd`, so enabling it enables `fluxcd` too if you don't have it.
 
-Each addon's page in the [Addon Catalog](../overview.md) lists its parameters. Set them as `key=value` pairs after the name, and pick a version with `--version`:
+Each addon's page in the [Addon Catalog](/addons/catalog) lists its parameters. Set them as `key=value` pairs after the name, and pick a version with `--version`:
 
 ```shell
 vela addon enable ingress-nginx serviceType=NodePort

@@ -38,3 +38,7 @@ package-lock.json
 /docs/upgrade-guides/
 /versioned_docs/*/release-notes/
 /versioned_docs/*/upgrade-guides/
+
+# Generated addon catalog pages, fetched at build time (scripts/addon-catalog.js).
+/addons/catalog/
+/.addon-catalog-static/

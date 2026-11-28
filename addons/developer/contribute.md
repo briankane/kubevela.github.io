@@ -19,7 +19,7 @@ Once merged, it's published to the `experimental` registry, and users enable it 
 To move an experimental addon into `addons/`, open a pull request that moves the directory and shows that the addon:
 
 - enables cleanly in the catalog's CI (see [What CI checks](#what-ci-checks));
-- has a page in the [Addon Catalog](../overview.md) on this site. That's a pull request against [kubevela/kubevela.io](https://github.com/kubevela/kubevela.io), with the page in `addons/` and an entry in `sidebar-addons.js`.
+- gets a page in the [Addon Catalog](/addons/catalog) on this site. The page is generated from the addon itself when it's published: its `metadata.yaml`, `parameter.cue`, definitions and README, so keep those clear and complete.
 
 Most addons that ship a CRD operator also ship test Applications in `test/e2e-test/addon-test/definition-test/testdata/<name>/`, so CI checks the definitions work, not just that the controllers start.
 

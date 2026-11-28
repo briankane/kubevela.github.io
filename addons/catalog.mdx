@@ -1,0 +1,13 @@
+---
+title: Addon Catalog
+description: Every addon in the KubeVela community catalog, with its parameters, definitions and versions.
+---
+
+import AddonCatalog from '@site/src/components/AddonCatalog';
+import index from '@site/addons/catalog/index.json';
+
+Every addon in the community catalog, [kubevela/catalog](https://github.com/kubevela/catalog). Each addon's pages are generated from the catalog itself: its parameters, the definitions it adds, its README as a guide, and every version back to the oldest KubeVela release these docs cover.
+
+The catalog opens on the verified addons, from the default registry. Experimental addons are under their own tab: they need the experimental registry first, as each one's page shows, and are not yet ready for production.
+
+<AddonCatalog addons={index.addons} />

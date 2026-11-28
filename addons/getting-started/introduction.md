@@ -11,7 +11,7 @@ This section covers the addons in the community catalog, [kubevela/catalog](http
 | You want to | Start with |
 | --- | --- |
 | Add a capability to your platform, such as Helm charts from Flux, canary releases or TLS certificates | [Install addons](./install.md), then the [Quick Start](./quick-start.md) |
-| See what's in the catalog and what each addon installs | The [Addon Catalog](../overview.md) |
+| See what's in the catalog and what each addon installs | The [Addon Catalog](/addons/catalog) |
 | Package your own operator and definitions so others can enable them with one command | [Make Your Own Addon](../developer/make-your-own-addon.md) |
 | Contribute an addon to the community catalog | [Contribute to the catalog](../developer/contribute.md) |
 

@@ -1,4 +1,5 @@
 const { fromGitHub } = require('./scripts/announcement');
+const { loadAddonCatalog, STATIC_DIR: ADDON_STATIC_DIR } = require('./scripts/addon-catalog');
 
 // Copy release-notes/ and upgrade-guides/ into every docs version before any plugin
 // loads. See scripts/sync-release-pages.js.
@@ -496,7 +497,8 @@ const config = {
 };
 
 // The announcement bar and the next community call are read from GitHub at
-// build time; with nothing to announce the site has no bar.
+// build time; with nothing to announce the site has no bar. The generated
+// addon catalog pages are fetched then too, before the docs load.
 module.exports = async function createConfig() {
   // The language menu appears once the site has more than one language.
   if (config.i18n.locales.length < 2) {
@@ -507,5 +509,7 @@ module.exports = async function createConfig() {
     config.themeConfig.announcementBar = announcementBar;
   }
   config.customFields = { ...config.customFields, nextCall };
+  loadAddonCatalog();
+  config.staticDirectories = ['static', ADDON_STATIC_DIR];
   return config;
 };
