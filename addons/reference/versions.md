@@ -1,5 +1,6 @@
 ---
-title: Versions
+title: KubeVela Compatibility
+sidebar_label: KubeVela Compatibility
 ---
 
 KubeVela releases don't ship addons. Each addon has its own version in the catalog, and `vela addon enable` installs the newest one unless you pass `--version`. What ties an addon to KubeVela is the `system` block in its `metadata.yaml`: `system.vela` and `system.kubernetes` are the versions it works with, and enabling it anywhere else is refused (pass `--skip-version-validating` to try anyway).
@@ -8,7 +9,7 @@ KubeVela releases don't ship addons. Each addon has its own version in the catal
 
 | KubeVela | Verified addons it can enable |
 | --- | --- |
-| v1.12 | All but `model-serving` (needs Kubernetes earlier than 1.22). `velaux` is v1.9.5; for the unreleased VelaUX 1.12 line see [VelaUX Versions](/velaux/reference/versions#velaux-112-on-older-kubevela-unreleased). |
+| Next (v1.12) | All but `model-serving` (needs Kubernetes earlier than 1.22). `velaux` is v1.9.5; for the unreleased VelaUX 1.12 line see [VelaUX Versions](/velaux/reference/versions#velaux-112-on-older-kubevela-unreleased). |
 | v1.11 | All but `model-serving`. |
 | v1.10, v1.9 | All but `model-serving` and `cloudshell` (needs v1.11 or later). |
 

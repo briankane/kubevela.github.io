@@ -25,7 +25,7 @@ The addon is an Application, `addon-vela-prism` in `vela-system`, deployed to th
 
 An init container makes a self-signed CA and serving certificate, valid for ten years, and patches the CA into both APIServices. The certificate is made again each time the pod starts.
 
-The parameters (namespace, image, CPU and memory) are on the addon's page, [vela-prism](/addons/vela-prism#parameters).
+The parameters (namespace, image, CPU and memory) are on the addon's page, [vela-prism](/addons/catalog/vela-prism/parameters).
 
 `vela addon enable` returns once the Application is deployed, a few seconds before the pod is ready, hence the `kubectl wait`.
 

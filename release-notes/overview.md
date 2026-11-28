@@ -49,7 +49,7 @@ Workflow, VelaUX, Terraform, Cluster Gateway, Prism and the addons have their ow
 | v1.10 | [0.6](/workflow/0.6/getting-started/introduction) | v1.9.2 from v1.10.10 (v1.9.0-alpha.2 before) | v0.8.2 from v1.10.10 (v0.8.0, then a v0.8.1 pre-release commit from v1.10.4) | v1.9.5 | v1.7.0 |
 | v1.9 | [0.6](/workflow/0.6/getting-started/introduction) | v1.9.0-alpha.2 | v0.8.0 from v1.9.7 (v0.7.10, then v0.7.11 from v1.9.2) | v1.9.5 | v1.7.0 |
 
-Workflow, Cluster Gateway and the Terraform controller are the versions vela-core is built with, as of the latest patch of each line (v1.12.0-alpha.3, v1.11.2, v1.10.10, v1.9.15); where a patch changed one, the cell says which. Cluster Gateway's is the image in the vela-core chart, which is the gateway that runs. VelaUX, Prism and the other [addons](/addons/overview) come from the addon catalog, so their version is whatever the catalog holds when you enable them. The Cluster Gateway, Terraform, VelaUX, Prism and Addons sections describe the current release only.
+Workflow, Cluster Gateway and the Terraform controller are the versions vela-core is built with, as of the latest patch of each line (v1.12.0-alpha.3, v1.11.2, v1.10.10, v1.9.15); where a patch changed one, the cell says which. Cluster Gateway's is the image in the vela-core chart, which is the gateway that runs. VelaUX, Prism and the other [addons](/addons/catalog) come from the addon catalog, so their version is whatever the catalog holds when you enable them. The Cluster Gateway, Terraform, VelaUX, Prism and Addons sections describe the current release only.
 
 ## How the notes are organised
 

@@ -509,7 +509,12 @@ module.exports = async function createConfig() {
     config.themeConfig.announcementBar = announcementBar;
   }
   config.customFields = { ...config.customFields, nextCall };
-  loadAddonCatalog();
+  const addons = loadAddonCatalog();
   config.staticDirectories = ['static', ADDON_STATIC_DIR];
+  config.stylesheets = [...(config.stylesheets || []), '/addon-logos/sidebar.css'];
+  // Without the catalog, links to addon pages have nowhere to go; that is a local build, so warn rather than fail.
+  if (!addons.length) {
+    config.onBrokenLinks = 'warn';
+  }
   return config;
 };

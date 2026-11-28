@@ -31,7 +31,7 @@ How to use multiple clusters from KubeVela lives in the KubeVela docs:
 
 * [Deploy to Multiple Clusters](/docs/next/end-user/policies/multi-cluster)
 * [Manage Clusters](/docs/next/platform-engineers/system-operation/managing-clusters): `vela cluster join`, list, detach.
-* [Working with OCM](/docs/next/platform-engineers/system-operation/working-with-ocm), and the [OCM Cluster-Gateway Manager](/addons/ocm-gateway-manager-addon) addon for clusters registered with Open Cluster Management.
+* [Working with OCM](/docs/next/platform-engineers/system-operation/working-with-ocm), and the [OCM Cluster-Gateway Manager](/addons/catalog/ocm-gateway-manager-addon) addon for clusters registered with Open Cluster Management.
 * [Underlying Mechanism](/docs/next/platform-engineers/auth/advance) of authentication, for how the identity travels through the gateway.
 
 These pages describe Cluster Gateway 1.10.0-alpha.1, the version KubeVela 1.12 ships. [Versions](../reference/versions.md) lists the version each KubeVela release ships and what changed between them.

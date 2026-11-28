@@ -201,7 +201,7 @@ export default function Toolkit() {
           traits, policies and workflow steps for GitOps, cloud resources, observability or capabilities of your own.
         </Translate>
       ),
-      to: 'addons/overview',
+      to: 'addons/catalog',
       Diagram: AddonsDiagram,
     },
     {

@@ -113,4 +113,4 @@ The registry's URL is `localhost`, so only your machine can use it. To share it,
 
 ## Reference
 
-- [chartmuseum addon](../chartmuseum.md)
+- [chartmuseum addon](/addons/catalog/chartmuseum)

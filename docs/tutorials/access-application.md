@@ -153,7 +153,7 @@ The response is the same "Hello World" page. See the [gateway trait](../end-user
 
 ## Traefik routes
 
-The `traefik` addon installs Traefik with Gateway API support, and adds three traits: [`http-route`](/addons/traefik#http-routetrait), [`https-route`](/addons/traefik#https-routetrait) and [`tcp-route`](/addons/traefik#tcp-routetrait).
+The `traefik` addon installs Traefik with Gateway API support, and adds three traits: [`http-route`](/addons/catalog/traefik), [`https-route`](/addons/catalog/traefik) and [`tcp-route`](/addons/catalog/traefik).
 
 ```shell
 vela addon enable traefik serviceType=LoadBalancer
@@ -165,7 +165,7 @@ Leave out `serviceType=LoadBalancer` on a cluster with no load balancer; the exa
 kubectl get service traefik -n vela-system
 ```
 
-See [Traefik](/addons/traefik) for the addon's other settings.
+See [Traefik](/addons/catalog/traefik) for the addon's other settings.
 
 ### HTTP
 

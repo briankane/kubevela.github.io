@@ -4,7 +4,7 @@ title: Expose an Application with ingress-nginx
 
 The built-in `gateway` trait writes an Ingress for a component, but something has to serve it. The `ingress-nginx` addon installs the NGINX Ingress controller, which serves Ingresses of class `nginx`, the class `gateway` uses by default.
 
-This runs on the cluster from the [Examples overview](./overview.md), created with Traefik turned off and ports 8080 and 8443 on your machine mapped to the cluster's load balancer:
+This runs on the cluster from the [Examples overview](/addons/catalog), created with Traefik turned off and ports 8080 and 8443 on your machine mapped to the cluster's load balancer:
 
 ```shell
 k3d cluster create addons-demo --k3s-arg "--disable=traefik@server:0" -p "8080:80@loadbalancer" -p "8443:443@loadbalancer"
@@ -115,5 +115,5 @@ vela addon disable ingress-nginx
 
 ## Reference
 
-- [ingress-nginx addon](../nginx-ingress-controller.md)
+- [ingress-nginx addon](/addons/catalog/ingress-nginx)
 - [`gateway` trait](/docs/end-user/traits/references#gateway)

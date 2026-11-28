@@ -15,6 +15,8 @@ function addonItem(addon) {
   return {
     type: 'category',
     label: addon.name,
+    // Its logo, from the stylesheet scripts/addon-catalog.js writes.
+    className: addon.logo ? `addon-sidebar-logo addon-sidebar-logo-${addon.name}` : undefined,
     link: { type: 'doc', id: `${dir}/index` },
     items: [
       ...others,
@@ -25,36 +27,25 @@ function addonItem(addon) {
   };
 }
 
-// catalog is the generated catalog: every verified addon by name. Experimental addons are left out of the sidebar
-// and found from the catalog page. Without the generated pages it is the hand-written pages, grouped as in
-// overview.md.
+// catalog is the generated catalog: the verified addons by category, KubeVela's own first. Experimental addons are
+// left out of the sidebar and found from the catalog page. Without the generated pages it is the catalog page alone.
 function catalog() {
-  const addons = readAddonCatalog();
-  if (!addons.length) {
-    return HAND_WRITTEN;
+  const groups = new Map();
+  for (const a of readAddonCatalog().filter((x) => !x.experimental)) {
+    const c = a.category || 'Other';
+    groups.set(c, [...(groups.get(c) || []), a]);
   }
+  const rank = (c) => (c === 'KubeVela' ? 0 : c === 'Other' ? 2 : 1);
   return {
     type: 'category',
     label: 'Addon Catalog',
+    collapsed: false,
     link: { type: 'doc', id: 'catalog' },
-    items: addons.filter((a) => !a.experimental).map(addonItem),
+    items: [...groups]
+      .sort(([x], [y]) => rank(x) - rank(y) || x.localeCompare(y))
+      .map(([label, addons]) => ({ type: 'category', label, collapsed: true, items: addons.map(addonItem) })),
   };
 }
-
-const HAND_WRITTEN = {
-  type: 'category',
-  label: 'Addon Catalog',
-  link: { type: 'doc', id: 'overview' },
-  items: [
-    { type: 'category', label: 'KubeVela platform', items: ['vela-prism', 'kubevela-io'] },
-    { type: 'category', label: 'Observability', items: ['mysql-exporter'] },
-    { type: 'category', label: 'Delivery', items: ['fluxcd', 'kruise-rollout'] },
-    { type: 'category', label: 'Gateway', items: ['nginx-ingress-controller', 'traefik'] },
-    { type: 'category', label: 'Security', items: ['cert-manager', 'dex', 'trivy-operator'] },
-    { type: 'category', label: 'Workloads', items: ['ai', 'flink-kubernetes-operator', 'chartmuseum', 'netlify', 'vegeta'] },
-    { type: 'category', label: 'Multi-cluster', items: ['ocm-hub-control-plane', 'ocm-gateway-manager-addon'] },
-  ],
-};
 
 module.exports = {
   addons: [
@@ -110,7 +101,7 @@ module.exports = {
       type: 'category',
       label: 'Reference',
       collapsed: false,
-      link: {type: 'generated-index', slug: '/reference', description: 'The versions each addon works with.'},
+      link: {type: 'generated-index', slug: '/reference', description: 'Which addon versions work with which KubeVela releases.'},
       items: [
         'reference/versions',
       ],

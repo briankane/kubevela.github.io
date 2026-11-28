@@ -4,7 +4,7 @@ title:  GitOps with FluxCD
 
 In this section, we will introduce how to use KubeVela to deliver in GitOps mode.
 
-> Please make sure you have enabled the [fluxcd](/addons/fluxcd) addon.
+> Please make sure you have enabled the [fluxcd](/addons/catalog/fluxcd) addon.
 
 ## Watch the Git repositories and sync automatically
 

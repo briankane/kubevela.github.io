@@ -68,6 +68,6 @@ helm uninstall cluster-gateway --namespace cluster-gateway
 | Proxy configuration | none | with `ClientIdentityPenetration` on, the `kubevela:ux` group (VelaUX) is not impersonated and acts as the registered credential |
 | `clustergateways/proxy` granted to | nobody; grant it yourself | vela-core's ServiceAccount and the `kubevela:client` group |
 | Priority and fairness | on | off (`--enable-priority-and-fairness=false`) |
-| OCM integration | `ocmIntegration.enabled` | not offered; use the [OCM Cluster-Gateway Manager](/addons/ocm-gateway-manager-addon) addon |
+| OCM integration | `ocmIntegration.enabled` | not offered; use the [OCM Cluster-Gateway Manager](/addons/catalog/ocm-gateway-manager-addon) addon |
 
 With KubeVela, `vela cluster join` writes cluster Secrets for you. Standalone, you write them yourself, in the format on [Register Clusters](../guides/register-clusters.md).

@@ -4,7 +4,7 @@ title: Serve HTTPS with cert-manager
 
 The `cert-manager` addon installs [cert-manager](https://cert-manager.io/), which issues TLS certificates and renews them before they expire. Here it issues a certificate for the Ingress from [Expose an Application with ingress-nginx](./expose-with-ingress-nginx.md), so start with that example's cluster and `hello` Application.
 
-The issuer below is self-signed, so it works on a laptop with no DNS or public address. On a real cluster you'd use a Let's Encrypt issuer instead; the [cert-manager addon](../cert-manager.md) page shows how.
+The issuer below is self-signed, so it works on a laptop with no DNS or public address. On a real cluster you'd use a Let's Encrypt issuer instead; the [cert-manager addon](/addons/catalog/cert-manager) page shows how.
 
 ## Enable the addon
 
@@ -139,5 +139,5 @@ Disabling `cert-manager` leaves its CRDs and namespace behind; delete them by ha
 
 ## Reference
 
-- [cert-manager addon](../cert-manager.md)
+- [cert-manager addon](/addons/catalog/cert-manager)
 - [`gateway` trait](/docs/end-user/traits/references#gateway)

@@ -468,7 +468,7 @@ const sidebars = {
           type: 'category',
           label: 'Addons',
           items: [
-            {type: 'link', label: 'Addon catalog', href: '/addons/overview'},
+            {type: 'link', label: 'Addon catalog', href: '/addons/catalog'},
             {type: 'link', label: 'VelaUX', href: '/velaux/operate/install-options'},
           ],
         },

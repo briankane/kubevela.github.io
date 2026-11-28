@@ -56,6 +56,7 @@ function readIndex() {
         description: v.description || '',
         experimental: Boolean(v.experimental),
         tags: v.tags || [],
+        category: v.category || '',
         logo,
         latest: v.latest,
         for: latest ? latest.for : [],
@@ -81,6 +82,15 @@ function loadAddonCatalog() {
   }
   fs.mkdirSync(DEST, { recursive: true });
   fs.writeFileSync(INDEX, JSON.stringify({ addons }, null, 2));
+  // The sidebar shows each addon's logo before its name; sidebar items take only a class name, so the logos are a
+  // stylesheet.
+  fs.writeFileSync(
+    path.join(LOGOS, 'sidebar.css'),
+    addons
+      .filter((a) => a.logo)
+      .map((a) => `.addon-sidebar-logo-${a.name}{--addon-logo:url(${a.logo})}`)
+      .join('\n'),
+  );
   return addons;
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
 import {useHistory} from '@docusaurus/router';
+import {kubevelaList as kubevela} from '@site/src/components/addon-kubevela';
 import styles from './styles.module.css';
 
 // The version picker and older-version banner on a generated addon page. `data` is the addon's versions.json:
@@ -11,9 +12,6 @@ const href = (data, version, page) => {
   const base = `/addons/catalog/${data.name}/${version === data.latest ? '' : `${version}/`}`;
   return base + (target ? `${target}/` : '');
 };
-
-const kubevela = (list) =>
-  list.length > 1 ? `KubeVela ${list.slice(0, -1).join(', ')} and ${list[list.length - 1]}` : `KubeVela ${list[0]}`;
 
 export default function AddonVersion({data, current, page}) {
   const history = useHistory();

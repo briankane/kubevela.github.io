@@ -24,9 +24,13 @@
 .tabs {
   display: flex;
   gap: 0.25rem;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .tab {
+  flex: none;
+  white-space: nowrap;
   padding: 0.4rem 0.8rem;
   color: var(--kv-muted);
   font: inherit;
@@ -94,11 +98,17 @@
   object-fit: contain;
 }
 
-.name {
+.title {
+  display: flex;
   flex: 1;
+  flex-direction: column;
   min-width: 0;
+}
+
+.name {
   font-weight: 600;
-  overflow-wrap: anywhere;
+  line-height: 1.3;
+  overflow-wrap: break-word;
 }
 
 .version {
@@ -145,4 +155,13 @@
 
 .none {
   color: var(--kv-muted);
+}
+
+.category {
+  margin: 1.75rem 0 0.75rem;
+  color: var(--kv-muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }

@@ -34,7 +34,7 @@ Enabling `fluxcd` adds the `helm` definition. Check its parameters with:
 vela show helm
 ```
 
-The [fluxcd addon](/addons/fluxcd) docs cover it in more detail.
+The [fluxcd addon](/addons/catalog/fluxcd) docs cover it in more detail.
 
 This application deploys the `podinfo` chart with two replicas:
 

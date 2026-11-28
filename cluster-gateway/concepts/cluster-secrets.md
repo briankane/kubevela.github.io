@@ -59,4 +59,4 @@ Anyone who can read the Secret has the cluster's credential, and so does anyone 
 
 ## With OCM
 
-With `--ocm-integration`, the gateway takes each cluster's endpoint and CA from the OCM `ManagedCluster` of the same name, and lists only clusters that have one. The Secret still holds the credential. The [OCM Cluster-Gateway Manager](/addons/ocm-gateway-manager-addon) addon sets this up for clusters registered with Open Cluster Management.
+With `--ocm-integration`, the gateway takes each cluster's endpoint and CA from the OCM `ManagedCluster` of the same name, and lists only clusters that have one. The Secret still holds the credential. The [OCM Cluster-Gateway Manager](/addons/catalog/ocm-gateway-manager-addon) addon sets this up for clusters registered with Open Cluster Management.

@@ -23,7 +23,7 @@ const CARDS = [
   { icon: 'download', title: 'Install', body: 'Standalone, on Kubernetes, or the CLI on its own.', to: 'install' },
   { icon: 'book', title: 'Core concepts', body: 'Applications, components, traits, policies and workflows.', to: 'getting-started/core-concept' },
   { icon: 'blocks', title: 'Definitions', body: "Build your platform's building blocks in CUE or Go.", to: 'platform-engineers/oam/x-definition' },
-  { icon: 'addons', title: 'Addons', body: 'Extend KubeVela from the community catalog.', to: '/addons/overview' },
+  { icon: 'addons', title: 'Addons', body: 'Extend KubeVela from the community catalog.', to: '/addons/catalog' },
   { icon: 'terminal', title: 'CLI reference', body: 'Every vela command and flag.', to: 'cli/vela' },
 ];
 

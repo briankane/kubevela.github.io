@@ -5,7 +5,7 @@ description: The addon's parameters, the Helm chart's values, and the flags of t
 
 ## Addon parameters
 
-Set with `vela addon enable vela-prism <name>=<value>`, or again later to change them; the addon page, [vela-prism](/addons/vela-prism#parameters), has the same table.
+Set with `vela addon enable vela-prism <name>=<value>`, or again later to change them; the addon page, [vela-prism](/addons/catalog/vela-prism/parameters), has the same table.
 
 | Parameter | Default | What it sets |
 | --- | --- | --- |

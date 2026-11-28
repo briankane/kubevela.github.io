@@ -127,4 +127,4 @@ The Kustomization is deleted with the Application, and Flux deletes what it appl
 
 ## Reference
 
-- [fluxcd addon](../fluxcd.md#kustomize): every `kustomize` parameter.
+- [fluxcd addon](/addons/catalog/fluxcd): every `kustomize` parameter.
